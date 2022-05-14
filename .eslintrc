@@ -1,0 +1,8 @@
+{
+  "extends": [],
+  "rules": {
+    "sequelize/create-indexes-concurrently": "error"
+  },
+  "env": {},
+  "plugins": ["sequelize"]
+}
