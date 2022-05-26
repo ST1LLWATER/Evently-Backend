@@ -39,13 +39,15 @@ exports.getMyEvents = async (req, res) => {
           },
           {
             year: {
-              [Op.in]: req.session.User.year,
+              [Op.contains]: [req.session.User.year],
             },
           },
         ],
       },
       order: [['scheduled_date', 'ASC']],
     });
+
+    console.log(myEvents);
 
     res.status(200).json({
       message: 'Successfully Fetched Events',
