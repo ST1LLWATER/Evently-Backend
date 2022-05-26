@@ -1,23 +1,21 @@
 const express = require('express');
-const { deleteEvent } = require('../controllers/event');
+const {
+  deleteEvent,
+  addNotice,
+  getMyEvents,
+  getNotices,
+} = require('../controllers/event');
 const { Event, Suggestion, Role, User } = require('../models');
 // const canCreateEvent = require("../middlewares/canCreateEvent");
 const router = express.Router();
 
-router.get('/myevents', async (req, res) => {
-  let allEvents = await Event.findAll();
-  let myEvents = allEvents.filter((event) =>
-    event.year.includes(req.session.User.year)
-  );
-
-  return res.status(200).json(myEvents);
-
-  // return res
-  //     .status(500)
-  //     .json({ message: "Failed To Create Event", success: false, err: err });
-});
+router.get('/myevents', getMyEvents);
 
 router.delete('/delete/:id/:creator', deleteEvent);
+
+router.post('/add/notice/:id', addNotice);
+
+router.get('/get/notices/:id', getNotices);
 
 router.post('/create', async (req, res) => {
   try {
