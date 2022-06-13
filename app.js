@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
-    store: new RedisStore({ client: redisClient }),
+    // store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     rolling: true,
