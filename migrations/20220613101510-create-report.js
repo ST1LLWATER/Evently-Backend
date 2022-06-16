@@ -1,27 +1,36 @@
 'use strict';
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Reports', {
+  async up(queryInterface, DataTypes) {
+    await queryInterface.createTable('reports', {
       id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
-      },
-      createdAt: {
+      date: {
+        type: DataTypes.DATE,
         allowNull: false,
-        type: Sequelize.DATE
       },
-      updatedAt: {
+      event_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        type: Sequelize.DATE
-      }
+      },
+      created_by: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      creator_roll_no: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      report: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Reports');
-  }
+  async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable('reports');
+  },
 };

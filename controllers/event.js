@@ -1,4 +1,11 @@
-const { Event, Notice, Suggestion, Role, sequelize } = require('../models');
+const {
+  Event,
+  Notice,
+  Suggestion,
+  Role,
+  Report,
+  sequelize,
+} = require('../models');
 const { Op, QueryTypes } = require('sequelize');
 
 exports.deleteEvent = async (req, res) => {
@@ -230,4 +237,51 @@ exports.getEventData = async (req, res) => {
   console.log(event);
 
   res.status(200).json(event);
+};
+
+exports.scheduleMeet = async (req, res) => {
+  const { meetdate, reporturl } = req.body;
+  const { event_id } = req.params;
+  console.log(
+    '🚀 ~ file: event.js ~ line 238 ~ exports.scheduleMeet= ~ req.session',
+    req.session
+  );
+  const created_by = req.session.User.full_name;
+  const creator_roll_no = req.session.User.roll_no;
+
+  try {
+    await Report.create({
+      date: meetdate,
+      event_id,
+      created_by,
+      creator_roll_no,
+      reporturl,
+    });
+    res.status(200).json({
+      message: 'Meet Scheduled Successfully',
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: 'Failed To Create Meet', success: false, err: err });
+  }
+};
+
+exports.getMeets = async (req, res) => {
+  const { event_id } = req.params;
+  try {
+    const meets = await Report.findAll({
+      where: {
+        event_id,
+      },
+    });
+    res.status(200).json(meets);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: 'Failed To Fetch Meets', success: false, err: err });
+  }
 };

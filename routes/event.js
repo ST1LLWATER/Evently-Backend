@@ -10,6 +10,8 @@ const {
   addRole,
   getDutyMembers,
   getEventData,
+  scheduleMeet,
+  getMeets,
 } = require('../controllers/event');
 // const canCreateEvent = require("../middlewares/canCreateEvent");
 const router = express.Router();
@@ -24,5 +26,7 @@ router.get('/get-suggestions/:eventId', getEventSuggestions);
 router.post('/add-role', addRole);
 router.get('/get-dutiful', getDutyMembers);
 router.get('/:id', getEventData);
+router.post('/schedule/:event_id', scheduleMeet);
+router.get('/get-schedule/:event_id', getMeets);
 
 module.exports = router;
