@@ -36,12 +36,9 @@ exports.signup = async (req, res) => {
 
     req.session.User = sessionData;
 
-    return (
-      res
-        .status(200)
-        // .redirect("/home")
-        .json({ message: 'Registered Successfully', success: true, user })
-    );
+    return res
+      .status(200)
+      .json({ message: 'Registered Successfully', success: true, user });
   } catch (err) {
     console.log(err);
     return res

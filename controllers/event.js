@@ -175,7 +175,6 @@ exports.createSuggestion = async (req, res) => {
 
 exports.getEventSuggestions = async (req, res) => {
   let { eventId } = req.params;
-  console.log('RUNNING');
   let suggestions = await Event.findOne({
     where: { event_id: eventId },
     include: Suggestion,
