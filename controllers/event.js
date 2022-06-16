@@ -7,6 +7,9 @@ const {
   sequelize,
 } = require('../models');
 const { Op, QueryTypes } = require('sequelize');
+const path = require('path');
+
+const multer = require('multer');
 
 exports.deleteEvent = async (req, res) => {
   if (req.params.creator !== req.session.User.roll_no) {
@@ -54,8 +57,6 @@ exports.getMyEvents = async (req, res) => {
       order: [['scheduled_date', 'ASC']],
     });
 
-    console.log(myEvents);
-
     res.status(200).json({
       message: 'Successfully Fetched Events',
       success: true,
@@ -96,7 +97,6 @@ exports.getNotices = async (req, res) => {
 
 exports.addNotice = async (req, res) => {
   const { title, notice, date, url } = req.body;
-  console.log(req.body);
 
   try {
     const addedNotice = await Notice.create({
@@ -234,18 +234,13 @@ exports.getEventData = async (req, res) => {
     },
   });
 
-  console.log(event);
-
   res.status(200).json(event);
 };
 
 exports.scheduleMeet = async (req, res) => {
   const { meetdate, reporturl } = req.body;
   const { event_id } = req.params;
-  console.log(
-    '🚀 ~ file: event.js ~ line 238 ~ exports.scheduleMeet= ~ req.session',
-    req.session
-  );
+
   const created_by = req.session.User.full_name;
   const creator_roll_no = req.session.User.roll_no;
 
@@ -284,4 +279,33 @@ exports.getMeets = async (req, res) => {
       .status(500)
       .json({ message: 'Failed To Fetch Meets', success: false, err: err });
   }
+};
+
+exports.uploadReport = async (req, res) => {
+  let uploadedFile;
+  let reqPath = path.join(__dirname, '../reports');
+  let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, reqPath);
+    },
+    filename: function (req, file, cb) {
+      // console.log(file);
+      uploadedFile = file;
+      cb(null, file.originalname);
+    },
+  });
+
+  let upload = multer({ storage: storage });
+  upload.single('files')(req, res, function (err) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+      // A Multer error occurred when uploading.
+    }
+
+    res.status(200).json({
+      message: 'File Uploaded Successfully',
+      success: true,
+    });
+  });
 };

@@ -1,6 +1,7 @@
 const express = require('express');
 const verifyUser = require('./middlewares/verifyUser');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 4000;
 
@@ -19,10 +20,13 @@ const {
 
 const app = express();
 
-app.use(express.json());
+// app.use(bodyParser.json());
 
-// app.use(flash());
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(bodyParser.json({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(flash());
 // app.use(passport.initialize());
 // app.use(passport.session());
 
@@ -36,14 +40,14 @@ app.use(
     cookie: {
       // secure: false,
       httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      // maxAge: 1000 * 60 * 60 * ,
     },
   })
 );
 
 app.use('/api', authRoutes);
 
-app.use(verifyUser);
+// app.use(verifyUser);
 
 // EVENT ROUTES //
 app.use('/api/event', eventRoutes);
